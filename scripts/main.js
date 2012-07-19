@@ -108,8 +108,28 @@ APIdone.Views.ResourceDetail = Backbone.View.extend({
     render: function () {
         var self = this;
         _.each(this.resource.attributes ,function(value, key){
-            $("#resources").append("<li><span class='key'>"+key+"</span>: <span>"+value+"</span></li>");
+            if(key == "url" && self.resource.url == value){
+
+            }else{
+                var value_edited = value;
+                if(self._check_if_image(value)){
+                    value_edited = "<img src='"+value+"'/>";
+                }else if(self._check_if_link(value)){
+                    value_edited = "<a href='"+value+"' target='blank_'>"+value+"</a>";
+                }
+                $("#resources").append("<li><span class='key'>"+key+"</span>: <span>"+value_edited+"</span></li>");
+            }
         });
+    },
+    _check_if_link: function(text){
+        var url_expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+        var url_regex = new RegExp(url_expression);
+        return text.match(url_regex);
+    },
+    _check_if_image: function(text){
+        var image_expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?\.(?:jpg|gif|png)(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+        var image_regex = new RegExp(image_expression);
+        return text.match(image_regex);
     },
 });
 
