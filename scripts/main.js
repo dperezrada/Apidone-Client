@@ -56,6 +56,7 @@ APIdone.Views.Childs = Backbone.View.extend({
 
     render: function () {
         var self = this;
+        $("#childs").html("");
         _.each(this.childs.models,function(model){
             model.set({current_url: self.current_url});
             var res = new APIdone.Views.Child({model: model});
@@ -82,6 +83,7 @@ APIdone.Views.Resources = Backbone.View.extend({
 
     render: function () {
         var self = this;
+        $("#resources").html("");
         _.each(this.resources.models,function(model){
             model.set({__url: model.url()});
             var res = new APIdone.Views.ResourcesSingle({model: model});
@@ -107,6 +109,7 @@ APIdone.Views.ResourceDetail = Backbone.View.extend({
 
     render: function () {
         var self = this;
+        $("#resource_content").html("");
         _.each(this.resource.attributes ,function(value, key){
             if(key == "url" && self.resource.url == value){
 
@@ -117,7 +120,7 @@ APIdone.Views.ResourceDetail = Backbone.View.extend({
                 }else if(self._check_if_link(value)){
                     value_edited = "<a href='"+value+"' target='blank_'>"+value+"</a>";
                 }
-                $("#resources").append("<li><span class='key'>"+key+"</span>: <span>"+value_edited+"</span></li>");
+                $("#resource_content").append("<li><span class='key'>"+key+"</span>: <span>"+value_edited+"</span></li>");
             }
         });
     },
@@ -187,32 +190,29 @@ APIdone.Router = Backbone.Router.extend({
         if(!path){
             path = "/__resources";
             type = "childs";
-        }else if(path.indexOf("__resources")>0){
-            type = "childs";
-        }else if(path.split('/').length%2 - 1 == 0){
-            type = "resource_detail";
-        }else{
-            type = "resources";
-        }
-        
-
-        $("#childs").html("");
-        $("#resources").html("");
-        
-        if(type == 'childs'){
             APIdone.Childs = new APIdone.Collections.GenericCollection({url: path})
             new APIdone.Views.Childs({url: path, data: APIdone.Childs});
-        }
-        if(type == 'resources'){
-            APIdone.Resources = new APIdone.Collections.GenericCollection({url: path})
-            new APIdone.Views.Resources({url: path, data: APIdone.Resources});
-        }
-        if(type == 'resource_detail'){
+            $("#base_resources_modal").modal();
+            $("#base_resources_modal").click(
+                function(){
+                    $("#base_resources_modal").modal('hide');
+                }
+            );
+        }else if(path.indexOf("__resources")>0){
+            type = "childs";
+            APIdone.Childs = new APIdone.Collections.GenericCollection({url: path})
+            new APIdone.Views.Childs({url: path, data: APIdone.Childs});
+        }else if(path.split('/').length%2 - 1 == 0){
+            type = "resource_detail";
             APIdone.ResourceDetail = new APIdone.Models.Resource({url: path})
             new APIdone.Views.ResourceDetail({url: path, data: APIdone.ResourceDetail});
 
             APIdone.Childs = new APIdone.Collections.GenericCollection({url: path+"/__resources"})
             new APIdone.Views.Childs({url: path, data: APIdone.Childs});
+        }else{
+            type = "resources";
+            APIdone.Resources = new APIdone.Collections.GenericCollection({url: path})
+            new APIdone.Views.Resources({url: path, data: APIdone.Resources});
         }
     }
 });
