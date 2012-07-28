@@ -47,7 +47,10 @@
             width:260px;
             margin-left:10px;
             background:red;         
-        }        
+        }     
+        li.active{
+            background-color: blue;
+        }   
     </style>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 </head>
@@ -66,7 +69,7 @@
         <div class="title"> Hola </div>
     </div>
     <div id='container'>
-        <div class="panel left"><ul id='resources'></ul></div>
+        <div class="panel left"><h4 id="title_resources"></h4><ul id='resources'></ul></div>
         <div class="panel middle"><div id="resource_content"></div></ul></div>
     </div>
 
@@ -80,6 +83,7 @@
 
     <script type="text/template" id="tmplt-resource-single">
         <a href="#<%= __url %>"><%= id %></a>
+        <ul class="childs"></ul>
     </script>
 
     <script type="text/template" id="tmplt-resource-detail">

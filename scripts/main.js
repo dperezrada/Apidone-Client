@@ -31,9 +31,16 @@ APIdone.Views.Child = Backbone.View.extend({
 APIdone.Views.ResourcesSingle = Backbone.View.extend({
     tagName: 'li',
     template: _.template($('#tmplt-resource-single').html()),
+    events: {
+        'click': 'mark_as_active'
+    },
     render: function() {
         $(this.el).append(this.template(this.model.toJSON()));
         return this;
+    },
+    mark_as_active: function(){
+        $("#resources li").removeClass("active");
+        $(this.el).addClass("active");
     }
 
 });
@@ -44,6 +51,7 @@ APIdone.Views.Childs = Backbone.View.extend({
     current_url: '',
     initialize: function (options) {
         if(options){
+            if(options.is_base) this.is_base = true;
             if(options.url) this.current_url = options.url.replace('/__resources', '');
             if(options.data){
                 this.childs = options.data;
@@ -56,11 +64,17 @@ APIdone.Views.Childs = Backbone.View.extend({
 
     render: function () {
         var self = this;
+        $(".childs").html("");
         $("#childs").html("");
         _.each(this.childs.models,function(model){
             model.set({current_url: self.current_url});
             var res = new APIdone.Views.Child({model: model});
-            $("#childs").append(res.render().el);
+            if (self.is_base) {
+                $("#childs").append(res.render().el);    
+            } else {
+                $("#resources li.active .childs").append(res.render().el);    
+            }
+            
         });
     },
 });
@@ -178,20 +192,39 @@ APIdone.Views.Main = Backbone.View.extend({
             $("#resources").append(res.render().el);
         });
     }
-})
+});
+
+APIdone.Views.Path = Backbone.View.extend({
+    el: $("#headers .title"),
+    initialize: function () {
+        this.render();
+    },
+    render: function () {
+        var splitted_url = appRouter.path.split('/');
+        var html = "";
+        var current_url = '#';
+        for (var i = 0; i<splitted_url.length; i++) {
+            if(!splitted_url[i]) continue;
+            current_url +='/'+splitted_url[i];
+            html += " / <a href='"+current_url+"'>"+splitted_url[i]+"</a>";
+        };
+        this.el.html(html);
+    }
+});
 
 APIdone.Router = Backbone.Router.extend({
     routes: {
         "*route": "defaultRoute" 
     },
 
-    defaultRoute: function (path) {
+    defaultRoute: function (path) { 
         var type;
         if(!path){
             path = "/__resources";
             type = "childs";
             APIdone.Childs = new APIdone.Collections.GenericCollection({url: path})
-            new APIdone.Views.Childs({url: path, data: APIdone.Childs});
+            new APIdone.Views.Childs({url: path, data: APIdone.Childs, is_base: true});
+
             $("#base_resources_modal").modal();
             $("#base_resources_modal").click(
                 function(){
@@ -211,9 +244,13 @@ APIdone.Router = Backbone.Router.extend({
             new APIdone.Views.Childs({url: path, data: APIdone.Childs});
         }else{
             type = "resources";
+            var splitted_url = path.split('/');
+            $("#title_resources").html(splitted_url[splitted_url.length-1]);
             APIdone.Resources = new APIdone.Collections.GenericCollection({url: path})
             new APIdone.Views.Resources({url: path, data: APIdone.Resources});
         }
+        this.path = path.replace('__resources', '');
+        new APIdone.Views.Path();
     }
 });
 
