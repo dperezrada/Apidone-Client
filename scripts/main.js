@@ -35,6 +35,14 @@ APIdone.Views.ResourcesSingle = Backbone.View.extend({
         'click': 'mark_as_active'
     },
     render: function() {
+        var posible_tags = ['name', 'title', 'id'];
+        for (var i = 0; i < posible_tags.length; i++) {
+            console.log(this.model.get(posible_tags[i]));
+            if(this.model.get(posible_tags[i])){
+                this.model.set({__show_value: this.model.get(posible_tags[i])});
+                break;
+            }
+        }
         $(this.el).append(this.template(this.model.toJSON()));
         return this;
     },
