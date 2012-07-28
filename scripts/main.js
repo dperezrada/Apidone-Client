@@ -6,6 +6,8 @@ var APIdone = {
     Templates:{}
 }
 
+// var base_url = "http://demo.apidone.com/buxus";
+
 APIdone.Models.Resource = Backbone.Model.extend({
     initialize: function(options) {
         this.url = options.url;
@@ -14,6 +16,7 @@ APIdone.Models.Resource = Backbone.Model.extend({
 
 APIdone.Collections.GenericCollection = Backbone.Collection.extend({
     initialize: function(options) {
+        // this.url = base_url+options.url;
         this.url = options.url;
     }
 });

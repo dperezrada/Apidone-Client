@@ -19,7 +19,6 @@
             background:#ccc;
         }
         #headers .title {
-            background:#efefef;
             height:40px;
             font-size:1.4em;
             line-height:40px;
@@ -35,8 +34,13 @@
             float:left;
             width:260px;
             margin-right:10px;
-            background:red;
         }
+        #container .panel.left .panel-left-inner{
+            height:100%;
+            background-color:#ffffff;
+            border:10px solid #efefef;
+            box-shadow:inset 1px 1px 5px rgba(0, 0, 0, 0.4);
+        }        
         #container .panel.middle {
             height:100%;
             display:block;
@@ -50,7 +54,25 @@
         }     
         li.active{
             background-color: blue;
-        }   
+        }
+        #title_resources {
+            background: #CCC;
+            border-top: 1px solid #AAA;
+            border-bottom: 1px solid #AAA;
+            padding: 10px;
+        }
+
+        ul#resources {
+            margin:0;
+        }
+        ul#resources li {
+            padding:5px 10px;
+            border-top:1px solid #fff;
+            border-bottom:1px solid #bbb;
+            background:#dfdfdf;
+            border-right:1px solid #ccc;
+            border-left:1px solid #ccc;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 </head>
@@ -65,12 +87,19 @@
         </div>
     </div>
 
-    <div id="headers">
-        <div class="title"> Hola </div>
+    <div id="headers" class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="title"> Hola </div>
+        </div>
     </div>
     <div id='container'>
-        <div class="panel left"><h4 id="title_resources"></h4><ul id='resources'></ul></div>
-        <div class="panel middle"><div id="resource_content"></div></ul></div>
+        <div class="panel left">
+            <div class="panel-left-inner">
+                <h4 id="title_resources"></h4><ul id='resources'></ul>
+            </div>
+            
+        </div>
+        <div class="panel middle"><div id="resource_content"></div></div>
     </div>
 
     <h1>APIdone</h1>
