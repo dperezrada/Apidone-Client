@@ -52,9 +52,9 @@
             margin-left:10px;
             background:red;         
         }     
-        li.active{
+        /*li.active{
             background-color: blue;
-        }
+        }*/
         #title_resources {
             background: #CCC;
             border-top: 1px solid #AAA;
@@ -72,6 +72,38 @@
             background:#dfdfdf;
             border-right:1px solid #ccc;
             border-left:1px solid #ccc;
+            font-size:14px;
+        }
+        ul#resources .childs li {
+            padding:5px 5px;
+            border:0px;
+            list-style:none;
+        }
+        ul#resources ul.childs {
+            margin-left:10px;
+        }
+        ul#resources ul.childs li{
+            font-size: 12px;
+            color: white;
+            background-color: green;
+            padding: 2px 5px;
+            margin-top: 5px;
+            -webkit-border-radius: 5px;
+        }
+        ul#resources ul.childs li a {
+            color: #fff;
+        }
+        #new_resource_container {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            right: 10px;
+            height: 20px;
+            background: #CCC;
+            padding: 5px;
+            border-left: 1px solid #BBB;
+            border-right: 1px solid #BBB;
+            border-top: 1px solid #AAA;
         }
     </style>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
@@ -97,6 +129,7 @@
             <div class="panel-left-inner">
                 <h4 id="title_resources"></h4><ul id='resources'></ul>
             </div>
+            <div id="new_resource_container"><a class='btn btn-primary' href="#">Create Resource</a></div>
             
         </div>
         <div class="panel middle"><div id="resource_content"></div></div>
@@ -106,6 +139,12 @@
     <div id="mainContainer">
        
     </div>
+
+    <script type="text/template" id="tmplt-resource-new">
+        <textarea></textarea>
+        <button>Create</button>
+    </script>    
+
     <script type="text/template" id="tmplt-child">
         <a href="#<%= current_url %>/<%= name %>"><%= name %></a>
     </script>
